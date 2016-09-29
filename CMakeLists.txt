@@ -15,15 +15,14 @@ set(${PROJECT}_VERSION_PATCH 6)
 # ARGUMENTS
 # ---------
 
+option(BUILD_STATIC "Build static libz2" ON)
 option(BUILD_BZIP2 "Build Bzip2 compressor/decompressor" OFF)
 option(BUILD_BZIP2_RECOVER "Build utility to extract data from damaged BZip2 archives" OFF)
-option(BUILD_BZ2_TESTS "Build test suite" OFF)
 
 # LIBRARIES
 # ---------
 
-add_library(
-    bz2
+set(BZ2_SOURCES
     blocksort.c
     huffman.c
     crctable.c
@@ -32,6 +31,21 @@ add_library(
     decompress.c
     bzlib.c
 )
+
+if(BUILD_STATIC)
+    add_library(
+        bz2
+        STATIC
+        ${BZ2_SOURCES}
+    )
+else()
+    add_library(
+        bz2
+        SHARED
+        ${BZ2_SOURCES}
+    )
+endif()
+
 
 # EXECUTABLES
 # -----------
@@ -55,8 +69,4 @@ if(BUILD_BZIP2_RECOVER)
         bzip2recover
         bzip2recover.c
     )
-endif()
-
-# UNIT TESTING
-if(BUILD_BZ2_TESTS)
 endif()
