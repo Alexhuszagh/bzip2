@@ -11,13 +11,26 @@ set(${PROJECT}_VERSION_MAJOR 1)
 set(${PROJECT}_VERSION_MINOR 0)
 set(${PROJECT}_VERSION_PATCH 6)
 
-#set(CMAKE_C_FLAGS )
 # ARGUMENTS
 # ---------
 
 option(BUILD_STATIC "Build static libz2" ON)
 option(BUILD_BZIP2 "Build Bzip2 compressor/decompressor" OFF)
 option(BUILD_BZIP2_RECOVER "Build utility to extract data from damaged BZip2 archives" OFF)
+
+if(BUILD_STATIC)
+    if(UNIX)
+        set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+        add_definitions(-fPIC)
+    elseif(MINGW)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -static")
+    elseif(MSVC)
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MTd /O0 /Fd${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pdb")
+        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MT /Ox /Zi /Fd${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pdb")
+        set(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL} /MT /Zi /Fd${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pdb")
+        set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} /MT /Fd${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pdb")
+    endif()
+endif()
 
 # LIBRARIES
 # ---------
