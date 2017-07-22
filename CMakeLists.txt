@@ -20,9 +20,9 @@ option(BUILD_BZIP2_RECOVER "Build utility to extract data from damaged BZip2 arc
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror")
-elif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror")
-elif(MSVC)
+elseif(MSVC)
     set(CMAKE_C_FLAGS "-WX ${CMAKE_C_FLAGS} -D_CRT_SECURE_NO_WARNINGS -wd4996")
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MTd /O0 /Fd${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pdb")
     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MT /Ox /Zi /Fd${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pdb")
