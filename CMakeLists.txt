@@ -14,7 +14,6 @@ set(${PROJECT}_VERSION_PATCH 6)
 # ARGUMENTS
 # ---------
 
-option(BUILD_STATIC "Build static libz2" ON)
 option(BUILD_BZIP2 "Build Bzip2 compressor/decompressor" OFF)
 option(BUILD_BZIP2_RECOVER "Build utility to extract data from damaged BZip2 archives" OFF)
 
@@ -30,7 +29,7 @@ elseif(MSVC)
     set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} /MT /Fd${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pdb")
 endif()
 
-if(BUILD_STATIC)
+if(NOT BUILD_SHARED_LIBS)
     if(MINGW OR MSYS OR CYGWIN)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -static")
     elseif(UNIX)
@@ -52,19 +51,10 @@ set(BZ2_SOURCES
     bzlib.c
 )
 
-if(BUILD_STATIC)
-    add_library(
-        bz2
-        STATIC
-        ${BZ2_SOURCES}
-    )
-else()
-    add_library(
-        bz2
-        SHARED
-        ${BZ2_SOURCES}
-    )
-endif()
+add_library(
+    bz2
+    ${BZ2_SOURCES}
+)
 
 
 # EXECUTABLES
